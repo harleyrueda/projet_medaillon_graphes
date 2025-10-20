@@ -1,0 +1,21 @@
+# Variables sensibles
+
+venv/
+
+.env
+
+# Fichiers Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de données brutes 
+*.csv
+*.parquet
+
+# Fichiers générés 
+
+.DS_Store
+*.log
+
