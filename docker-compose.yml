@@ -99,7 +99,9 @@ services:
       - neo4j_data:/data
 
   fastapi:
-    build: ./api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
     container_name: fastapi
     ports:
       - "8000:8000"
