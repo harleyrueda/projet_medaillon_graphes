@@ -3,3 +3,4 @@ uvicorn
 pandas
 pyarrow
 tqdm
+great_expectations>=0.16,<0.17
