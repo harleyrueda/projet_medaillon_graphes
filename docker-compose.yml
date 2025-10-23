@@ -14,7 +14,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   airflow-init:
-    image: apache/airflow:2.7.0
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: airflow-init
     env_file: .env
     environment:
@@ -36,12 +38,15 @@ services:
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ./Makefile:/opt/airflow/Makefile
 
   airflow-webserver:
-    image: apache/airflow:2.7.0
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: airflow-webserver
     restart: always
-    user: "50000:50000"
+    user: "1000:0"
     env_file: .env
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -61,12 +66,15 @@ services:
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ./Makefile:/opt/airflow/Makefile
 
   airflow-scheduler:
-    image: apache/airflow:2.7.0
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     container_name: airflow-scheduler
     restart: always
-    user: "50000:50000"
+    user: "1000:0"
     env_file: .env
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -84,12 +92,12 @@ services:
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ./Makefile:/opt/airflow/Makefile
 
   neo4j:
-    image: neo4j:4.4
+    image: neo4j:5.20
     container_name: neo4j
     restart: always
-    user: "${DOCKER_UID}:${DOCKER_GID}"
     environment:
       NEO4J_AUTH: none
       NEO4J_dbms_default__database: neo4j

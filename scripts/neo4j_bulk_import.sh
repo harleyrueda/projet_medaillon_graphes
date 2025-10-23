@@ -2,6 +2,8 @@
 set -e
 cd "$(dirname "$0")/.."
 
+start_total=$(date +%s)
+
 INPUT_DIR=${1:-data/silver}
 OUTPUT_DIR=${2:-data/gold}
 
@@ -28,30 +30,44 @@ edges = pd.concat([pd.read_parquet(f) for f in edges_files])
 edges.rename(columns={"src": ":START_ID", "dst": ":END_ID"}, inplace=True)
 edges.to_csv(os.path.join(output_dir, "edges.csv"), index=False)
 
-print("CSV files created successfully.")
+print("Fichiers CSV créés")
 PYCODE
 
-docker compose up -d neo4j
-sleep 20
 
-echo "Esperando a que Neo4j esté listo..."
-until docker exec neo4j cypher-shell "RETURN 1" > /dev/null 2>&1; do
-    echo "Neo4j no está listo, esperando..."
+echo "En attente que Neo4j soit prêt"
+until cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "RETURN 1" > /dev/null 2>&1; do
+    echo "Neo4j n'est pas encore prêt"
     sleep 5
 done
-echo "Neo4j está listo!"
+echo "Neo4j est prêt"
 
-docker exec -i neo4j cypher-shell <<'CYPHER'
+echo "Importation des données dans Neo4j"
+cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" <<'CYPHER'
 MATCH (n) DETACH DELETE n;
 CREATE INDEX node_id_index IF NOT EXISTS FOR (n:Node) ON (n.id);
 
-USING PERIODIC COMMIT 100
-LOAD CSV WITH HEADERS FROM 'file:///nodes.csv' AS row
-CREATE (:Node {id: toInteger(row.`id:ID`), name: row.name, label: row.label});
+CALL {
+    LOAD CSV WITH HEADERS FROM 'file:///nodes.csv' AS row
+    WITH row
+    CREATE (:Node {
+        id: toInteger(row.`id:ID`),
+        name: row.name,
+        label: row.label
+    })
+} IN TRANSACTIONS OF 50 ROWS;
 
-USING PERIODIC COMMIT 100
-LOAD CSV WITH HEADERS FROM 'file:///edges.csv' AS row
-MATCH (src:Node {id: toInteger(row.`:START_ID`)}),
-      (dst:Node {id: toInteger(row.`:END_ID`)})
-CREATE (src)-[:REL]->(dst);
+CALL {
+    LOAD CSV WITH HEADERS FROM 'file:///edges.csv' AS row
+    WITH row
+    MATCH (src:Node {id: toInteger(row.`:START_ID`)}),
+          (dst:Node {id: toInteger(row.`:END_ID`)})
+    CREATE (src)-[:REL]->(dst)
+} IN TRANSACTIONS OF 50 ROWS;
 CYPHER
+
+cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH (n:Node) RETURN count(n) AS nodes;"
+cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH ()-[r:REL]->() RETURN count(r) AS relationships;"
+
+end_total=$(date +%s)
+echo "Importation terminée en $((end_total - start_total)) secondes."
+
