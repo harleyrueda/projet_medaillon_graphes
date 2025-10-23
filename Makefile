@@ -9,7 +9,7 @@ down:
 
 # --------------------- 1) Génération de données synthétiques --------------------------------------
 seed:
-	python3 scripts/generate_sample_data.py --out data/raw --nodes 1000 --edges 5000
+	python3 scripts/generate_sample_data.py --out data/raw --nodes 100000 --edges 500000
 
 # --------------------  2) BRONZE CSV -> Parquet  --------------------------------------------------
 bronze:

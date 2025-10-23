@@ -11,7 +11,9 @@ j’ai effectué plusieurs requêtes Cypher afin d’interroger directement les 
 
 ![alt text](image.png)
 
+2) POST /query/cypher : Exécuter une requête Cypher
 
+3) GET /entity/{id} : Récupérer un noeud et ses voisins
 
 
 

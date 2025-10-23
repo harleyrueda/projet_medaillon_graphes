@@ -19,3 +19,7 @@ __pycache__/
 .DS_Store
 *.log
 
+#autres
+
+pandas_gx_checkpoint.py
+gx_ok_checkpoint.py

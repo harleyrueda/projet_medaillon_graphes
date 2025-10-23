@@ -22,7 +22,7 @@ def convert_csv_to_parquet(input_dir, output_dir):
 
 
 def pipeline_bronze():
-    parser = argparse.ArgumentParser(description="CSV to Parquet conversion")
+    parser = argparse.ArgumentParser(description="CSV conversion parquet")
     parser.add_argument("--in", dest="input_dir", required=True)
     parser.add_argument("--out", dest="output_dir", required=True)
     args = parser.parse_args()

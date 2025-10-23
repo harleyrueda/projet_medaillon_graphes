@@ -69,5 +69,5 @@ cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH (n:Node) RETURN count(n)
 cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH ()-[r:REL]->() RETURN count(r) AS relationships;"
 
 end_total=$(date +%s)
-echo "Importation terminée en $((end_total - start_total)) secondes."
+echo "Importation terminee en $((end_total - start_total)) secondes."
 
