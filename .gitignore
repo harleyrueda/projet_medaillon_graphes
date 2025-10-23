@@ -23,3 +23,9 @@ __pycache__/
 
 pandas_gx_checkpoint.py
 gx_ok_checkpoint.py
+
+# Dossiers à ignorer 
+.vscode/
+grafana/
+logs/
+schema/
