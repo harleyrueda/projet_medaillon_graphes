@@ -11,9 +11,9 @@ L’interface de la documentation API est disponible sur : http://localhost:8000
 - Le fichier ingest_kg.py contient le DAG Airflow qui, à l’aide de BashOperator, exécute les différentes étapes du pipeline.
 - La partie Seed génère les données synthétiques.
 - La partie Bronze convertit (comprime) les données brutes en fichiers Parquet.
-- La partie Silver exécute la vérification de qualité et le partitionnement des relations (edges) en plusieurs shards via fonctions great_expectations.
+- La partie Silver exécute la vérification de qualité (via fonctions great_expectations) et le partitionnement des relations (edges) en plusieurs shards.
 - Finalement, la partie Gold crée les fichiers CSV nécessaires à l’importation et au chargement des données dans Neo4j.
-- Une fois ces étapes terminées, la FastAPI permet de visualiser et analyser les données via des requêtes Cypher exécutées directement sur la base de graphes Neo4j.
+- Une fois ces étapes terminées, la FastAPI permet de visualiser et analyser les données via des requêtes Cypher.
 
 ## Utilisation et Configuration
 
@@ -21,7 +21,7 @@ Arborescence proposée par le exercice — dans mon cas particulier, j’ai ajou
 
 ![alt text](images_read_me/arborescence.png)
 
-Créer un fichier .env à la racine du projet avec les variables :
+Concernant le .env: créer un fichier .env à la racine du projet avec les variables :
 
 - POSTGRES_USER=
 - POSTGRES_PASSWORD=
@@ -102,18 +102,18 @@ j’ai effectué des requêtes Cypher afin d’interroger directement les donné
 
 ### 2) POST /query/cypher : Exécuter une requête Cypher
 --------------------------------------------------------------
-{ "query": "MATCH (n) RETURN count(n) AS total_nodes" }
+- { "query": "MATCH (n) RETURN count(n) AS total_nodes" }
 
 ![alt text](images_read_me/post.png)
 
 ---------------------------------------------------------------
 
-{ "query": "MATCH ()-[r]->() RETURN count(r) AS total_edges" } 
+- { "query": "MATCH ()-[r]->() RETURN count(r) AS total_edges" } 
 
 ![alt text](images_read_me/post_edges.png)
 
 --------------------------------------------------------------------------------------------------------------------
-relations entre noeuds 
+- Relations entre noeuds:
 
 { "query": "MATCH (a)-[r]->(b) RETURN a.label AS source, b.label AS target, count(*) AS total ORDER BY total DESC" } 
 
@@ -121,7 +121,7 @@ relations entre noeuds
 
 ---------------------------------------------------------------------------------------------------------------------
 
-nodes par type 
+- Nodes par type: 
 
 { "query": "MATCH (n) RETURN DISTINCT n.label AS label, count(*) AS total ORDER BY total DESC" }
 
@@ -135,6 +135,9 @@ nodes par type
 
 ![alt text](images_read_me/get_ent2.png)
 
+
+
+## Merci pour votre temps.
 
 
 
