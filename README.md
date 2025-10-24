@@ -23,36 +23,36 @@ Arborescence proposée par le exercice — dans mon cas particulier, j’ai ajou
 
 - Créer un fichier .env à la racine du projet avec les variables :
 
-POSTGRES_USER=
-POSTGRES_PASSWORD=
-POSTGRES_DB=
+-POSTGRES_USER=
+-POSTGRES_PASSWORD=
+-POSTGRES_DB=
 
-AIRFLOW_USER=
-AIRFLOW_PASSWORD=
-AIRFLOW_EMAIL=
+-AIRFLOW_USER=
+-AIRFLOW_PASSWORD=
+-AIRFLOW_EMAIL=
 
-NEO4J_URI=bolt://neo4j:7687
-NEO4J_USER=
-NEO4J_PASSWORD=
+-NEO4J_URI=bolt://neo4j:7687
+-NEO4J_USER=
+-NEO4J_PASSWORD=
 
 - Avant tout ( Afin de construire et d’installer toutes les images et dépendances nécessaires à Airflow, Neo4j et FastAPI ), il faut lancer une première fois :
 
-docker compose build
-docker compose up -d
+-docker compose build
+-docker compose up -d
 
 - Ensuite, il est possible d’utiliser la mécanique du Makefile :
 
-make up
-make down
+-make up
+-make down
 
 
 - et de lancer les étapes du pipeline :
 
-make seed
-make bronze
-make silver
-make gold
-make e2e
+-make seed
+-make bronze
+-make silver
+-make gold
+-make e2e
 
 ## Dockerfiles:
 
@@ -61,8 +61,8 @@ Pour pouvoir exécuter Airflow avec Neo4j, j’ai dû créer une image Dockerfil
 
 L’installation de cypher-shell se fait à travers les dépôts officiels de Neo4j pour Debian, comme indiqué dans la documentation.
 
-Pour Cypher Shell https://neo4j.com/docs/operations-manual/current/cypher-shell/
-Image Debian - Cypher Shell: https://neo4j.com/docs/operations-manual/2025.09/installation/linux/debian/
+-Pour Cypher Shell https://neo4j.com/docs/operations-manual/current/cypher-shell/
+-Image Debian - Cypher Shell: https://neo4j.com/docs/operations-manual/2025.09/installation/linux/debian/
 
 Cela a permis d’établir la connexion avec Neo4j depuis le conteneur Airflow et de réaliser les imports automatiquement à travers les tâches du pipeline.
 
