@@ -2,12 +2,18 @@
 set -e
 cd "$(dirname "$0")/.."
 
-start_total=$(date +%s)
+# comme ma machine a peu de RAM, j'ai ajoute la variable start_total pour mesurer le temps de chargement vers Neo4j
+
+start_total=$(date +%s) 
+
+# dossiers d'entree et sortie
 
 INPUT_DIR=${1:-data/silver}
 OUTPUT_DIR=${2:-data/gold}
 
 mkdir -p "$OUTPUT_DIR"
+
+#------- generation de csv - Silver  vers CSV Gold ------------------------------
 
 python3 - <<PYCODE
 import pandas as pd
@@ -33,7 +39,7 @@ edges.to_csv(os.path.join(output_dir, "edges.csv"), index=False)
 print("Fichiers CSV créés")
 PYCODE
 
-
+#------------- verification disponibilite Neo4j - usage initial de cypher-shell ---------------------------------
 echo "En attente que Neo4j soit prêt"
 until cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "RETURN 1" > /dev/null 2>&1; do
     echo "Neo4j n'est pas encore prêt"
@@ -41,6 +47,7 @@ until cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "RETURN 1" > /dev/null 2>
 done
 echo "Neo4j est prêt"
 
+#-----------------------importation des donnees dans Neo4j-----------------------------------------------
 echo "Importation des données dans Neo4j"
 cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" <<'CYPHER'
 MATCH (n) DETACH DELETE n;
@@ -65,8 +72,10 @@ CALL {
 } IN TRANSACTIONS OF 50 ROWS;
 CYPHER
 
+#-------------verification des resultats (dans logs)--------------------------------------------------
+
 cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH (n:Node) RETURN count(n) AS nodes;"
-cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH ()-[r:REL]->() RETURN count(r) AS relationships;"
+cypher-shell -a bolt://neo4j:7687 -u neo4j -p "" "MATCH ()-[r:REL]->() RETURN count(r) AS edges;"
 
 end_total=$(date +%s)
 echo "Importation terminee en $((end_total - start_total)) secondes."

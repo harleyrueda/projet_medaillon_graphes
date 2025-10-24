@@ -1,6 +1,10 @@
+# image arirflow
+
 FROM apache/airflow:2.7.0
 
 USER root
+
+# installation make et cypher-shell 
 
 RUN apt-get update && apt-get install -y wget make gnupg && \
     wget -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - && \

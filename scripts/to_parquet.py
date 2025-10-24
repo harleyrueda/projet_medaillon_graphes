@@ -2,6 +2,8 @@ import argparse
 import os
 import pandas as pd
 
+# ----------------------- Fonction de conversion (compression automatique) CSV - .parquet (nodes et edges) ---------
+
 
 def convert_csv_to_parquet(input_dir, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -19,6 +21,9 @@ def convert_csv_to_parquet(input_dir, output_dir):
     )
     df_edges.to_parquet(f"{output_dir}/edges.parquet", index=False)
     print(f"{output_dir}/edges.parquet")
+
+
+# ----------------------- point d'entree via argparse ---------------------------------
 
 
 def pipeline_bronze():

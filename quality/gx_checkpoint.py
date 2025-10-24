@@ -4,6 +4,9 @@ import os
 import sys
 import argparse
 
+# -----Verification qualité via Great Expectations--------------------------------
+# -- (expect_column_values_to_be_unique, expect_column_values_to_not_be_null)------
+
 
 def gx_quality_checks(input_dir):
     nodes = pd.read_parquet(os.path.join(input_dir, "nodes.parquet"))

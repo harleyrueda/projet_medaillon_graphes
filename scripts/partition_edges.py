@@ -4,6 +4,9 @@ import shutil
 import pandas as pd
 
 
+# ------------------------ fonction partition des edges en shards - vers Silver--------
+
+
 def partition_to_silver(input_dir, output_dir, partitions):
     os.makedirs(output_dir, exist_ok=True)
     shutil.copyfile(f"{input_dir}/nodes.parquet", f"{output_dir}/nodes.parquet")
@@ -17,6 +20,9 @@ def partition_to_silver(input_dir, output_dir, partitions):
         edges.loc[edges["shard"] == i, ["src", "dst", "type"]].to_parquet(
             f"{shard_dir}/edges.parquet", index=False
         )
+
+
+# ----------------------- point d'entree via argparse ---------------------------------
 
 
 def partition_edges_main():

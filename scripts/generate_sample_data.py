@@ -4,6 +4,8 @@ import csv
 import random
 from tqdm import tqdm
 
+# ------------- géneration de noeuds synthetiques (nodes.csv) ------------------------
+
 
 def generate_nodes(path, count):
     labels = ["Person", "Org", "Paper"]
@@ -16,6 +18,9 @@ def generate_nodes(path, count):
             writer.writerow([i, label, name])
 
 
+# ------------- géneration des relations synthetiques (edges.csv) ------------------------
+
+
 def generate_edges(path, count, max_node_id):
     with open(os.path.join(path, "edges.csv"), mode="w", newline="") as f:
         writer = csv.writer(f)
@@ -24,6 +29,9 @@ def generate_edges(path, count, max_node_id):
             src = random.randint(0, max_node_id - 1)
             dst = random.randint(0, max_node_id - 1)
             writer.writerow([src, dst, "REL"])
+
+
+# ----------------------- point d'entree via argparse - generation (graphs) graphes syntetiques ---------------------------------
 
 
 def generate_synthetic_graph():
