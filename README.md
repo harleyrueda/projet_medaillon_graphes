@@ -21,7 +21,7 @@ Arborescence proposée par le exercice — dans mon cas particulier, j’ai ajou
 
 ![alt text](images_read_me/arborescence.png)
 
-- Créer un fichier .env à la racine du projet avec les variables :
+Créer un fichier .env à la racine du projet avec les variables :
 
 - POSTGRES_USER=
 - POSTGRES_PASSWORD=
@@ -35,18 +35,18 @@ Arborescence proposée par le exercice — dans mon cas particulier, j’ai ajou
 - NEO4J_USER=
 - NEO4J_PASSWORD=
 
-- Avant tout ( Afin de construire et d’installer toutes les images et dépendances nécessaires à Airflow, Neo4j et FastAPI ), il faut lancer une première fois :
+Avant tout ( Afin de construire et d’installer toutes les images et dépendances nécessaires à Airflow, Neo4j et FastAPI ), il faut lancer une première fois :
 
 - docker compose build
 - docker compose up -d
 
-- Ensuite, il est possible d’utiliser la mécanique du Makefile :
+Ensuite, il est possible d’utiliser la mécanique du Makefile :
 
 - make up
 - make down
 
 
-- et de lancer les étapes du pipeline :
+et de lancer les étapes du pipeline :
 
 - make seed
 - make bronze
@@ -82,17 +82,25 @@ j’ai effectué des requêtes Cypher afin d’interroger directement les donné
 
 ## DAG Airflow - OK :
 
+![alt text](images_read_me/airflow1.png)
+
+![alt text](images_read_me/airflow2.png)
+
 
 ## INSERTION nodes et edges dans Neo4j OK:
+![alt text](images_read_me/nodes.png)
 
+![alt text](images_read_me/edges.png)
 
-## FAST API: 
+## FAST API:
 
-1) GET /health : Santé de l'API
+![alt text](images_read_me/fastapiOK.png)
+
+### 1) GET /health : Santé de l'API
 
 ![alt text](images_read_me/get_health.png)
 
-2) POST /query/cypher : Exécuter une requête Cypher
+### 2) POST /query/cypher : Exécuter une requête Cypher
 --------------------------------------------------------------
 { "query": "MATCH (n) RETURN count(n) AS total_nodes" }
 
@@ -121,7 +129,7 @@ nodes par type
 
 --------------------------------------------------------------------------------------------------------------------
 
-3) GET /entity/{id} : Récupérer un noeud et ses voisins
+### 3) GET /entity/{id} : Récupérer un noeud et ses voisins
 
 ![alt text](images_read_me/get_ent1.png)
 
